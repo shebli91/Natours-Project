@@ -1,17 +1,18 @@
+const fs = require('fs');
 const express = require('express');
+const { resourceLimits } = require('worker_threads');
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res
-    .status(200)
-    .json({ Message: 'Hello from the server side!', app: 'Natours' });
-});
+const tours = JSON.parse(
+  fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
+);
 
-app.post('/', (req, res) => {
+app.get('/api/v1/tours', (req, res) => {
   res.status(200).json({
-    Message: 'You can post to this endpoint',
-    app: 'Natours',
+    status: 'success',
+    results: tours.length,
+    data: { tours },
   });
 });
 
