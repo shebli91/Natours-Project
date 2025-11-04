@@ -17,6 +17,12 @@ const handelValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handelJWTError = () =>
+  new AppError('Invalid token. Please log in again!', 401);
+
+const handleJWTExpiredError = () =>
+  new AppError('Token Expired. Please log in again!', 401);
+
 const sendErrorForDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -61,6 +67,8 @@ module.exports = (err, req, res, next) => {
     if (error.code === 11000) error = handleDuplicatedFieldsDB(error);
     if (error.name === 'ValidationError')
       error = handelValidationErrorDB(error);
+    if (error.name === 'JsonWebTokenError') error = handelJWTError();
+    if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
     sendErrorForProd(error, res);
   }
 };
