@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please tell us your name'],
     unique: true,
     trim: true,
-    minLength: [8, 'A user must have a minimum of 8 characters'],
+    minLength: [4, 'A user must have a minimum of 8 characters'],
     maxLength: [40, 'A user must have a maximum of 40 characters'],
   },
   email: {
@@ -19,7 +19,11 @@ const userSchema = new mongoose.Schema({
     validate: [validator.isEmail, 'Please provide a valid email'],
   },
   photo: String,
-
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user',
+  },
   password: {
     type: String,
     required: [true, 'Please provide a password'],
